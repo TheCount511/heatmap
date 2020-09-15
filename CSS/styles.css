@@ -1,0 +1,13 @@
+body{
+	background-color: #ecf4f3 ;
+	color:#006a71;
+}
+header{
+	text-align: center;
+	font-family: 'Lora', serif;
+}
+.canvas{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
