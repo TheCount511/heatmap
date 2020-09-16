@@ -7,7 +7,5 @@ header{
 	font-family: 'Lora', serif;
 }
 .canvas{
-	display: flex;
-    justify-content: center;
-    align-items: center;
+
 }
