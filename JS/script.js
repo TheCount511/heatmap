@@ -1,12 +1,10 @@
 const API="https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
-const canvasHeight=820,
-canvasWidth =650,
-padding=50,
+const canvasHeight=520,
+canvasWidth =670,
+padding=100,
 specifier = "%M:%S",
-timeFormat = d3.timeFormat("%M:%S");
-var y = d3.scaleTime()
-  .range([0, canvasHeight]);
-
+timeFormat = d3.timeFormat("%M:%S"),
+color=d3.scaleOrdinal(d3.schemeCategory10);
 
 d3.json(API, (err,data) => {
  const TIME = data.map(item=>item.Time);
@@ -25,26 +23,15 @@ xScale.range([padding, canvasWidth-padding])
 
 const xAxis = d3.axisBottom(xScale); 
 
-y.domain(d3.extent(data, function(d) {
+const yScale = d3.scaleTime()
+  .range([padding, canvasHeight-padding]);
+
+yScale.domain(d3.extent(data, function(d) {
     return d.Time;
   }));
-const parseTime =TIME.map(time=>{
-  return d3.timeParse(specifier)(time);
-})
 
-
- const yScale = d3.scaleTime();
-yScale.domain(d3.extent(parseTime, (time)=>{console.log(time); return time}))
-.range([padding, canvasHeight-padding]);
-
-const yAxis = d3.axisLeft(y).tickFormat(timeFormat)
-
-const dataset = parseTime.map((item, index)=>{
-  return([xScale(YEAR[index]), yScale(item)]);
-});
-
-
-
+const yAxis = d3.axisLeft(yScale)
+      .tickFormat(timeFormat)
 
 
   
@@ -55,12 +42,14 @@ const dataset = parseTime.map((item, index)=>{
    .style("background-color", "white");
 
    CANVAS.selectAll("circle")
-   .data(dataset)
+   .data(data)
    .enter()
    .append("circle")
-   .attr("cx", d => d[0])
-   .attr("cy", d=>  d[1])
-   .attr("r", "6");
+   .attr("cx", (d)=>xScale(d.Year))
+   .attr("cy", (d)=>yScale(d.Time))
+   .attr("r", "5")
+   .attr("fill", d=>{return(color(d.Doping != ""))})
+   ;
    
    CANVAS.append("g")
    .attr("id", "x-axis")
@@ -72,4 +61,9 @@ const dataset = parseTime.map((item, index)=>{
    .attr("transform", `translate(${padding}, 0)`)
    .call(yAxis);
 
+   CANVAS.append("text")
+   .attr("transform", `rotate(-90)`)
+   .attr("x", "-200")
+   .attr("y", "0")
+   .text("Time in Minutes")
 });
