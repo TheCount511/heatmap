@@ -1,8 +1,7 @@
 const API="https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
-const canvasHeight=520,
-canvasWidth =670,
-padding=100,
-specifier = "%M:%S",
+const canvasHeight=620,
+canvasWidth =700,
+padding=70,
 timeFormat = d3.timeFormat("%M:%S"),
 color=d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -41,14 +40,42 @@ const yAxis = d3.axisLeft(yScale)
    .attr("height", canvasHeight)
    .style("background-color", "white");
 
+  const Tooltip =  d3.select(".canvas")
+  .append("div")
+  .attr("id", 'tooltip')
+  .style("display", "none");
+
+
+  const mouseOver = (d)=>{
+    Tooltip.transition()
+    .duration(200)
+    .style("display", "block")
+    
+    Tooltip.html(`${d.Name} : ${d.Nationality} 
+      <br>Year     : ${d.Year}
+      <br>Time  : ${timeFormat(d.Time)}
+      <br>${d.Doping}`)
+      .style('left', `${xScale(d.Year)+10}px`)
+      .style('top', `${yScale(d.Time)+150}px`);
+  }
+
+  const mouseOut=()=>{
+    Tooltip.transition()
+    .duration(200)
+    .style("display", "none");
+  }
+
    CANVAS.selectAll("circle")
    .data(data)
    .enter()
    .append("circle")
    .attr("cx", (d)=>xScale(d.Year))
    .attr("cy", (d)=>yScale(d.Time))
-   .attr("r", "5")
+   .attr("r", "6")
+   .style("opacity", 0.7)
    .attr("fill", d=>{return(color(d.Doping != ""))})
+   .on("mouseover", mouseOver)
+   .on("mouseout", mouseOut)
    ;
    
    CANVAS.append("g")
@@ -64,6 +91,34 @@ const yAxis = d3.axisLeft(yScale)
    CANVAS.append("text")
    .attr("transform", `rotate(-90)`)
    .attr("x", "-200")
-   .attr("y", "0")
-   .text("Time in Minutes")
+   .attr("y", "20")
+   .text("Time in Minutes");
+
+   CANVAS.append("text")
+   .attr("x","455")
+   .attr("y", "200")
+   .text("No doping allegations");
+
+  CANVAS.append("rect")
+   .attr("x","600")
+   .attr("y", "186")
+   .attr("width", 20)
+  .attr("height", 20)
+  .attr("fill", color(false));
+
+   CANVAS.append("text")
+   .attr("x","400")
+   .attr("y", "230")
+   .text("Riders with doping allegations");
+
+   CANVAS.append("rect")
+   .attr("x","600")
+   .attr("y", "215")
+   .attr("width", 20)
+  .attr("height", 20)
+  .attr("fill", color(true));
+
+
+
+
 });

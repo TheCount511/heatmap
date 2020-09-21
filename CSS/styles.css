@@ -9,3 +9,9 @@ header{
 .canvas{
 
 }
+
+#tooltip{
+	position: absolute;
+	max-width: 200px;
+	background-color: #68b0ab;
+}
