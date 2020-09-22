@@ -20,7 +20,7 @@ const xScale = d3.scaleLinear();
 xScale.domain([d3.min(YEAR)-1, d3.max(YEAR)+1]);
 xScale.range([padding, canvasWidth-padding])
 
-const xAxis = d3.axisBottom(xScale); 
+const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d")); 
 
 const yScale = d3.scaleTime()
   .range([padding, canvasHeight-padding]);
@@ -43,18 +43,19 @@ const yAxis = d3.axisLeft(yScale)
   const Tooltip =  d3.select(".canvas")
   .append("div")
   .attr("id", 'tooltip')
-  .style("display", "none");
+  .style("opacity", "0");
 
 
   const mouseOver = (d)=>{
     Tooltip.transition()
     .duration(200)
-    .style("display", "block")
+    .style("opacity", "0.9")
     
     Tooltip.html(`${d.Name} : ${d.Nationality} 
       <br>Year     : ${d.Year}
       <br>Time  : ${timeFormat(d.Time)}
       <br>${d.Doping}`)
+      .attr('data-xvalue', d.Year)
       .style('left', `${xScale(d.Year)+10}px`)
       .style('top', `${yScale(d.Time)+150}px`);
   }
@@ -62,15 +63,18 @@ const yAxis = d3.axisLeft(yScale)
   const mouseOut=()=>{
     Tooltip.transition()
     .duration(200)
-    .style("display", "none");
+    .style("opacity", "0");
   }
 
    CANVAS.selectAll("circle")
    .data(data)
    .enter()
    .append("circle")
+   .attr("class", "dots")
    .attr("cx", (d)=>xScale(d.Year))
    .attr("cy", (d)=>yScale(d.Time))
+   .attr('data-xvalue', (d)=>d.Year)
+   .attr('data-yvalue', (d)=>d.Time)
    .attr("r", "6")
    .style("opacity", 0.7)
    .attr("fill", d=>{return(color(d.Doping != ""))})
