@@ -55,7 +55,7 @@ const yAxis = d3.axisLeft(yScale)
       <br>Year     : ${d.Year}
       <br>Time  : ${timeFormat(d.Time)}
       <br>${d.Doping}`)
-      .attr('data-xvalue', d.Year)
+      .attr('data-year', d.Year)
       .style('left', `${xScale(d.Year)+10}px`)
       .style('top', `${yScale(d.Time)+150}px`);
   }
@@ -70,7 +70,7 @@ const yAxis = d3.axisLeft(yScale)
    .data(data)
    .enter()
    .append("circle")
-   .attr("class", "dots")
+   .attr("class", "dot")
    .attr("cx", (d)=>xScale(d.Year))
    .attr("cy", (d)=>yScale(d.Time))
    .attr('data-xvalue', (d)=>d.Year)
@@ -98,7 +98,7 @@ const yAxis = d3.axisLeft(yScale)
    .attr("y", "20")
    .text("Time in Minutes");
 
-   CANVAS.append("text")
+ /*  CANVAS.append("text")
    .attr("x","455")
    .attr("y", "200")
    .text("No doping allegations");
@@ -121,8 +121,27 @@ const yAxis = d3.axisLeft(yScale)
    .attr("width", 20)
   .attr("height", 20)
   .attr("fill", color(true));
+*/
+const legendContainer = CANVAS.append("g")
+.attr("id", "legend");
 
+const legend = legendContainer.selectAll("#legend")
+.data(color.domain())
+.enter().append("g")
+.attr("class", "legend-label")
+.attr("transform", (d,i)=>`translate(0, ${canvasHeight/2-i*20})`)
 
+  legend.append("rect")
+    .attr("x", canvasWidth - 50)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
 
-
+legend.append("text")
+.attr("x", canvasWidth-60)
+.attr("y", 9)
+.style("text-anchor", "end")
+.attr("dy", "0.35em")
+.text((d)=>(d?"Riders with doping allegations"
+  :"No doping allegations"));
 });

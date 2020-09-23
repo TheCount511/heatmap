@@ -15,6 +15,6 @@ header{
 	max-width: 200px;
 	background-color: #68b0ab;
 	pointer-events: none;
-	border-radius: 5px;
-	padding: 5px;
+	border-radius: 10px;
+	padding: 10px;
 }
