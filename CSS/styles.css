@@ -1,21 +1,32 @@
 body{
-	background-color: #ecf4f3 ;
 	color:#006a71;
+	font-family: 'Roboto', sans-serif;
+
 }
 header{
 	text-align: center;
-	font-family: 'Lora', serif;
 }
+header h1{
+	margin-top: 20px;
+	margin-bottom: 5px;
+}header h2{
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
 .canvas{
 display: block;
 margin: auto;
+font-size: 0.8em;
+color: #006a71;
 }
 
 #tooltip{
 	position: absolute;
 	max-width: 200px;
-	background-color: #68b0ab;
+	background-color: #b2ebf2;
 	pointer-events: none;
 	border-radius: 10px;
 	padding: 10px;
+	font-size: 0.8em;
 }

@@ -1,7 +1,8 @@
 const API="https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
-const canvasHeight=620,
+const canvasHeight=550,
 canvasWidth =700,
-padding=70,
+paddingLeft=70,
+paddingTop=40,
 timeFormat = d3.timeFormat("%M:%S"),
 color=d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -18,12 +19,12 @@ data.forEach(function(d) {
 
 const xScale = d3.scaleLinear();
 xScale.domain([d3.min(YEAR)-1, d3.max(YEAR)+1]);
-xScale.range([padding, canvasWidth-padding])
+xScale.range([paddingLeft, canvasWidth-paddingLeft])
 
 const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d")); 
 
 const yScale = d3.scaleTime()
-  .range([padding, canvasHeight-padding]);
+  .range([paddingTop, canvasHeight-paddingTop]);
 
 yScale.domain(d3.extent(data, function(d) {
     return d.Time;
@@ -34,13 +35,14 @@ const yAxis = d3.axisLeft(yScale)
 
 
   
-  const CANVAS =  d3.select(".canvas")
+  const CANVAS =  d3.select("body")
    .append("svg")
+   .attr("class", "canvas")
    .attr("width", canvasWidth)
    .attr("height", canvasHeight)
    .style("background-color", "white");
 
-  const Tooltip =  d3.select(".canvas")
+  const Tooltip =  d3.select("body")
   .append("div")
   .attr("id", 'tooltip')
   .style("opacity", "0");
@@ -56,7 +58,7 @@ const yAxis = d3.axisLeft(yScale)
       <br>Time  : ${timeFormat(d.Time)}
       <br>${d.Doping}`)
       .attr('data-year', d.Year)
-      .style('left', `${xScale(d.Year)+10}px`)
+      .style('left', `${xScale(d.Year)+4}px`)
       .style('top', `${yScale(d.Time)+150}px`);
   }
 
@@ -84,12 +86,12 @@ const yAxis = d3.axisLeft(yScale)
    
    CANVAS.append("g")
    .attr("id", "x-axis")
-   .attr("transform", `translate(0, ${canvasHeight-padding})`)
+   .attr("transform", `translate(0, ${canvasHeight-paddingTop})`)
    .call(xAxis);
 
    CANVAS.append("g")
    .attr("id", "y-axis")
-   .attr("transform", `translate(${padding}, 0)`)
+   .attr("transform", `translate(${paddingLeft}, 0)`)
    .call(yAxis);
 
    CANVAS.append("text")
